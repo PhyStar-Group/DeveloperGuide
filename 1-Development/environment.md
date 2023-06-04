@@ -29,14 +29,70 @@
     ccmake ..
     ```
 4. 进入cmake gui界面，按下【c】,将以下设置打开
-    - CMAKE_INSTALL_PREFIX=/opt/hdf5/1.12.2 （设置安装路径，绝对路径）
+    - CMAKE_INSTALL_PREFIX=/path/to/install （设置安装路径，绝对路径）
     - HDF5_BUILD_FORTRAN=ON
-    - HDF5_ENABLE_PARALLEL （注意：不要勾选c++版本）
+    - HDF5_ENABLE_PARALLEL=ON （注意：不要勾选c++版本）
 5. 依次按下【c】,【g】
     ```
-    make –j64 （-j后面的数字取决于计算机核数）
+    make –j （-j后面的数字可根据计算机核数确定）
     ```
-    - 如果安装在/opt下，需要管理员权限，需要在以上命令前均加sudo
-6. 将/opt/hdf5/1.12.2添加至自己的环境变量
+    - 如果安装在/opt等非用户目录下，需要管理员权限，需要在以上命令前均加sudo
+6. 将/path/to/install添加至自己的环境变量
 
 ### openblas
+
+1. 下载最新版本openblas[https://github.com/xianyi/OpenBLAS](https://github.com/xianyi/OpenBLAS)，并解压
+
+2. 安装
+
+   ```bash
+   make -j
+   make install PREFIX=/path/to/install
+   ```
+
+​	3. 并将安装路径加入到个人环境变量中
+
+### FFTW3
+
+1. 下载最新版本FFTW3 [https://fftw.org/](https://fftw.org/)
+
+2. 解压（以fftw 3.3.10为例）
+
+   ```bash
+   tar -zxcf fftw-3.3.10.tar.gz
+   cd fftw-3.3.10
+   ```
+
+3. 安装
+
+   - 默认安装，将按照到/usr/local/bin
+
+     ```bash
+     ./configure
+     make -j
+     sudo make install
+     ```
+
+   - 如果要自定义安装路径
+
+     ```bash
+     ./configure --prefix=/path/to/install
+     make -j
+     sudo make install
+     ```
+
+   - 如果需要使用openmp，等其它编译选项，可以参见[https://www.fftw.org/fftw3_doc/Installation-on-Unix.html](https://www.fftw.org/fftw3_doc/Installation-on-Unix.html). 或者
+
+     ```
+     ./configure --help
+     ```
+
+4. 配置
+
+   - 如果使用makefile编译项目
+
+     ```	
+     -I/path/to/install/include -L/path/to/install/lib -lfftw3 -lm
+     ```
+
+   - 如果使用cmake，由于很多cmake在自动查找fftw项目时容易出现问题，最好自己手动添加FFTW3_ROOT的路径
