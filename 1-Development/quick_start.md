@@ -63,7 +63,7 @@
    ```
 
 ## 使用VSCode进行开发
-通过VSCode可以更加方便地进行代码的管理、开发和测试。具体的使用技巧可以参考[利用VSCode进行开发]((vscode_trick.md))
+通过VSCode可以更加方便地进行代码的管理、开发和测试。具体的使用技巧可以参考[利用VSCode进行开发](vscode_trick.md)
 
 # Tests
 
