@@ -9,5 +9,5 @@
 ## [技术问题](2-TechnicalProblem/README.md)
 介绍开发过程中解决和未解决的难题，供参考
 
-## 规范手册
+## [规范手册](3-Specification/README.md)
 介绍PhyStar需要遵守的程序规范，命名规范等
