@@ -1,6 +1,6 @@
 # 开发者中文手册
 开发者手册（中文）
-## 理论手册
+## [理论手册](0-Theory/README.md)
 各个部分的理论
 
 ## [开发手册](1-Development/README.md)
