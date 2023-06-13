@@ -1,6 +1,6 @@
-\chapter{流体求解基本理论}
-\section{均匀各向同性不可压缩湍流}
-\subsection{基本方程}
+\chapter{流体模拟理论}
+\section{基本方程}
+\subsection{不可压缩湍流}
 \begin{equation}\label{eq:ch1-ns}
 \begin{split}
 \frac{\partial \ve {u}}{\partial t}+\ve{u} \cdot \nabla \ve{u}&=-\nabla p / \rho+\nu \nabla^{2} \ve{u}+\ve{f}\\
@@ -8,15 +8,14 @@
 \end{split}
 \end{equation}
 其中$\ve u$是湍流脉动速度, $p$ 是压强脉动, $\nu$ 是运动粘度, $\ve f$是体积力.
-\subsection{计算方法}
-\begin{itemize}
-\item 标准计算域：$2\pi\times2\pi\times2\pi$ (可修改)
-\item 空间格式: 伪谱法
-\item  时间格式：二阶显示Adams-Bashforth 格式
-\end{itemize}
-%\subsubsection{伪谱法}
-%\subsubsection{混淆误差}
-\subsection{时间分裂形式}
+
+介绍其它可能形式
+\subsection{可压缩湍流}
+
+\subsection{大涡模拟}
+
+\section{时间离散}
+\subsection{模拟方法}
 参考Challabotla 博士论文的方法，即
 \begin{equation}
 	\frac{u_i^{n+1}-u_i^n}{\Delta t}=\frac{3}{2}T(u_i^n)-\frac{1}{2}T(u_i^{n-1})-\frac{1}{\rho}\frac{\partial p^{n+1}}{ \partial x_i}
@@ -38,7 +37,12 @@
 \begin{equation}
 u_i^{n+1}-u^*=-\Delta t\frac{\partial p^{n+1}}{\partial x_i}
 \end{equation}
-\subsection{流场初始化方法}
+
+\subsection{空间离散}
+
+\section{典型流体问题}
+\subsection{均匀各向同性湍流}
+\subsubsection{流场初始化方法}
 采用\citet{rogallo_numerical_1981}初始化方法：
 \begin{equation}
 	\hat{\ve u}(\ve k)=\frac{1}{k\sqrt{k_1^2+k_2^2}}\left( \begin{array}{c}
@@ -51,8 +55,8 @@ u_i^{n+1}-u^*=-\Delta t\frac{\partial p^{n+1}}{\partial x_i}
 \begin{equation}
 E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_p}^2)}
 \end{equation}
-\subsection{强迫各向同性湍流：加力方法}
-\subsubsection*{低波数加力}
+\subsubsection{强迫各向同性湍流：加力方法}
+\noindent \textbf{低波数加力}\\
 只在大尺度部分添加能量，具体形式如下\citep{machiels_predictability_1997}
 \begin{equation}
 	\hat{\ve f}=\left\lbrace \begin{array}{c}
@@ -61,13 +65,13 @@ E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_
 	\end{array}\right. 
 \end{equation}
 程序中的默认加力形式，其中默认加力波数范围1$\sim$2，$\frac{\varepsilon}{2E_f}=0.5$
-\subsubsection*{线性加力}
+\noindent \textbf{线性加力}\\
 在所有尺度上添加能量，此方法常用于有限差分方法，即\citep{lundgren_linearly_2003,rosales_linear_2005},
 \begin{equation}
 \hat{\ve f}=\frac{\varepsilon}{2E}\hat{\ve u}
 \end{equation}
 其中让$\frac{\varepsilon}{2E}$设置为经验常数，比如0.1333.
-\subsection{常见统计量}
+\subsubsection{常见统计量}
 \begin{tabular}{cc}
 		\hline 
 		统计量&计算表达式\\
@@ -85,8 +89,8 @@ E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_
 	
 \end{tabular} 
 
-\section{均匀剪切湍流}
-\subsection{基本方程}
+\subsection{均匀剪切湍流}
+\subsubsection{基本方程}
 $\ve u =\ve U+\ve u'$
 平均速度为：
 $U_1=0$, $U_2=Sx_1$,和 $U_3=0$.
