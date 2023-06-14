@@ -28,7 +28,7 @@
 
 2. 进入example/simpleflow目录， 并新建build目录
 
-   ```
+   ```shell
    cd example/simpleflow
    mkdir build
    ```
@@ -42,13 +42,13 @@
 
 4. 编译
 
-   ```
+   ```shell
    make -j
    ```
 
  5. 将runscript_shear中所有文件，copy到build目录中
 
-    ```
+    ```shell
     cp -r ../runscript_shear/* .
     ```
 
@@ -69,11 +69,11 @@
 ## Doxygen
 为了方便开发者了解程序的结构以及相关类视图，我们利用Doxygen自动生成html形式的文档。具体操作如下：
 1. Doxygen 安装(以ubuntu为例)
-   ```
+   ```shell
    sudo apt-get install doxygen
    ```
 2. 进入doc/doxygen目录，生成html文件
-   ```
+   ```shell
    cd doc/doxygen
    doxygen ./Doxyfile
    ```
