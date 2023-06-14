@@ -65,6 +65,19 @@
 ## 使用VSCode进行开发
 通过VSCode可以更加方便地进行代码的管理、开发和测试。具体的使用技巧可以参考[利用VSCode进行开发](vscode_trick.md)
 
+# 辅助文档
+## Doxygen
+为了方便开发者了解程序的结构以及相关类视图，我们利用Doxygen自动生成html形式的文档。具体操作如下：
+1. Doxygen 安装(以ubuntu为例)
+   ```
+   sudo apt-get install doxygen
+   ```
+2. 进入doc/doxygen目录，生成html文件
+   ```
+   cd doc/doxygen
+   doxygen ./Doxyfile
+   ```
+   将在doc/doxygen目录下生成html目录，用浏览器打开index.html即可
 # Tests
 
 需要googletest，后期再补充
