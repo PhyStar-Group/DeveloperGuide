@@ -12,10 +12,10 @@
     - 以上模型的名字未来可能尽可能简写，尽可能保证3-6个字符之间
     - 对应颗粒可自定义相应的模型，例如
     ```toml
-    0={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1.,1.,1.], G=[0.,0.,0.], FM=["Stokes"]}
-    1={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1.,1.,1.], G=[0.,0.,0.], FM=["Oseen",     "Saffman"]}
-    2={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1.,1.,1.], G=[0.,0.,0.], FM=["MaxeyRily", "Saffman", "Basset"]}
-    3={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1.,1.,1.], G=[0.,0.,0.], FM=[]}
+    0={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1,1,1], G=[0,0,0], FM=["Stokes"], TM=["Stokes"]}
+    1={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1,1,1], G=[0,0,0], FM=["Oseen",     "Saffman"], TM=["Stokes"]}
+    2={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1,1,1], G=[0,0,0], FM=["MaxeyRily", "Saffman", "Basset"], TM=["Stokes"]}
+    3={ModelID=1,Size=100,DR=1000,Radius=0.001, AR=[1,1,1], G=[0,0,0], FM=["Stokes"], TM=["Stokes"]}
     ```
     其中让ModelID=1~99预留出来作为用户自定义的大类标签，比如1为自定义普通球形颗粒，2为自定义普通非球形颗粒等.
 
