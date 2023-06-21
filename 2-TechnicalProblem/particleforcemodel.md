@@ -34,7 +34,7 @@
                 virtual const std::string getName(){
                     return "Sphere::"+std::to_string(N_dim)+"D Stokes Force";
                 }
-                virtual void addForce(ParticleField<N_dim> & pfield, ParticleBase* ptr_particle){
+                virtual void Force(ParticleField<N_dim> & pfield, ParticleBase* ptr_particle){
 
                 }
             };
@@ -42,7 +42,7 @@
                 virtual const std::string getName(){
                     return "Sphere::"+std::to_string(N_dim)+"D Oseen Force";
                 }
-                virtual void addForce(ParticleField<N_dim> & pfield, ParticleBase* ptr_particle){
+                virtual void Force(ParticleField<N_dim> & pfield, ParticleBase* ptr_particle){
 
                 }
             };
