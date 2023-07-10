@@ -17,7 +17,9 @@
 ## 第三方库的安装
 ### hdf5
 1. 下载hdf5-1.12.2 (1.14版本需要较高的cmake版本>3.18)
-    [https://portal.hdfgroup.org/display/support/HDF5%201.12.2](https://portal.hdfgroup.org/display/support/HDF5%201.12.2)
+  [https://portal.hdfgroup.org/display/support/HDF5%201.12.2](https://portal.hdfgroup.org/display/support/HDF5%201.12.2)
+    - 注意：官网上有多个安装包，必须选择hdf5-N.tar.gz形式的安装包（N为版本号）
+
 2. 解压hdf5-1.12.2
     ```
     tar –xzvf hdf5-1.12.2.tar.gz
@@ -34,7 +36,7 @@
     - HDF5_ENABLE_PARALLEL=ON （注意：不要勾选c++版本）
 5. 依次按下【c】,【g】
     ```
-    make –j （-j后面的数字可根据计算机核数确定）
+    make –j N（-j后面的数字可根据计算机核数确定）
     ```
     - 如果安装在/opt等非用户目录下，需要管理员权限，需要在以上命令前均加sudo
 6. 安装（将编译后的文件安装到/path/to/install）
