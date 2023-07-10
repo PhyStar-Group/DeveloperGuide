@@ -37,7 +37,11 @@
     make –j （-j后面的数字可根据计算机核数确定）
     ```
     - 如果安装在/opt等非用户目录下，需要管理员权限，需要在以上命令前均加sudo
-6. 将/path/to/install添加至自己的环境变量
+6. 安装（将编译后的文件安装到/path/to/install）
+    ```
+    make install
+    ```
+7. 将/path/to/install添加至自己的环境变量
 
 ### openblas
 
