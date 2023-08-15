@@ -82,3 +82,9 @@
 
 需要googletest，后期再补充
 
+# 常见问题
+## mpi 编译器相关的异常
+- 可能出现的问题：找不到mpi, 运行时报不知原因的“核数不匹配”的错误。
+- 本程序目前仅支持gcc 和 openmpi, 暂不支持intel系列的编译器。请在编译相关代码时，选择合适的编译器。
+- 如果使用vscode, 通过vim ~/.bashrc 注释intel系列环境，比如oneapi后，可能无法完全取消所有环境。此时，对于WSL用户，可以在左下角选择 Close Remote connection 重新连接进入。对于ssh用户，可shift+crtl+P, 输入kill VScode server on host 关闭远程的服务，以重置vscode 的环境。
+
