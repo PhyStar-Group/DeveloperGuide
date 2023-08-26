@@ -27,12 +27,18 @@
         pip install --upgrade sphinx_markdown_tables
         ```
     - 为了方便环境配置，我写了一个自动配置的脚本，可运行以下命令自动配置
-        （待完成）
+        ```bash
+        source .venv/bin/activate
+        pip install furo
+        pip install --upgrade myst_parser
+        pip install --upgrade sphinx_markdown_tables
+        ```
     - 如何修改了文档，可以使用以下命令编译新的html
-         ```
+         ```bash
          make clean
          make html
          ```
+         目前latex只支持纯英文，后续调研一下，看如何解决。
     - 以上启用操作需要在sphinxdoc目录中进行
     - 
 
