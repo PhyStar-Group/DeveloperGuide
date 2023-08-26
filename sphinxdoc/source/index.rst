@@ -15,6 +15,7 @@ PhyStar 开发手册
    Specification/index_spec.rst
    Theory/theory.md
    Tests/index_test.rst
+   Document/index_doc.rst
 
 .. toctree::
    :maxdepth: 1
