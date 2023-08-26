@@ -7,9 +7,14 @@ PhyStar 开发手册
 ===================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: 目录:
-   
+   :maxdepth: 1
+   :caption: 手册内容:   
+
+   Development/index_dev.rst
+.. toctree::
+   :maxdepth: 1
+   :caption: 帮助:  
+
    mdstyle.md
 
 

@@ -3,24 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-PhyStar 开发手册
+设计与使用
 ===================================
 
 .. toctree::
    :maxdepth: 1
-   :caption: 手册内容:   
 
-   Development/index_dev.rst
-.. toctree::
-   :maxdepth: 1
-   :caption: 帮助:  
-
-   mdstyle.md
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   index_program.rst
+   index_mod.rst
+   
