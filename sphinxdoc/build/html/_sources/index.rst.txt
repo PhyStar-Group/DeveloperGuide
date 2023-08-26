@@ -10,7 +10,7 @@ PhyStar 开发手册
    :maxdepth: 2
    :caption: 目录:
    
-   test.md
+   mdstyle.md
 
 
 Indices and tables
