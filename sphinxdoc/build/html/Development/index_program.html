@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="架构设计思路" href="program.html" /><link rel="prev" title="设计与使用" href="index_dev.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.08.19 -->
-        <title>程序设计 - PhyStar-Dev 0.0.1 documentation</title>
+        <title>程序整体设计 - PhyStar-Dev 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -157,14 +157,33 @@
   <p class="caption" role="heading"><span class="caption-text">手册内容:</span></p>
 <ul class="current">
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index_dev.html">设计与使用</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 设计与使用</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">程序设计</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 程序设计</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">程序整体设计</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 程序整体设计</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="program.html">架构设计思路</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="index_mod.html">主要模块与函数设计思路</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 主要模块与函数设计思路</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="index_dmdyn.html">颗粒动力学模块 – DMDyn</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 颗粒动力学模块 – DMDyn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="mod_smartplist.html">smartplist 设计</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="index_tfft3d.html">三维傅里叶变换与pencil并行 – tfft3d</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 三维傅里叶变换与pencil并行 – tfft3d</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="index_fileio.html">基于HDF5的文件格式 – FileIO</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 基于HDF5的文件格式 – FileIO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="index_solver.html">求解器模块 – solver</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 求解器模块 – solver</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Freshman/index_fresh.html">入门手册</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 入门手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Specification/index_spec.html">PhyStar开发规范</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of PhyStar开发规范</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Theory/theory.html">理论与算法</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Tests/index_test.html">测试手册</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of 测试手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -206,7 +225,7 @@
         </div>
         <article role="main">
           <section id="id1">
-<h1>程序设计<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<h1>程序整体设计<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="program.html">架构设计思路</a></li>

@@ -10,5 +10,8 @@
    :maxdepth: 1
 
    index_program.rst
-   index_mod.rst
+   index_dmdyn.rst
+   index_tfft3d.rst
+   index_fileio.rst
+   index_solver.rst
    

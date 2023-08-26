@@ -11,6 +11,11 @@ PhyStar 开发手册
    :caption: 手册内容:   
 
    Development/index_dev.rst
+   Freshman/index_fresh.rst
+   Specification/index_spec.rst
+   Theory/theory.md
+   Tests/index_test.rst
+
 .. toctree::
    :maxdepth: 1
    :caption: 帮助:  

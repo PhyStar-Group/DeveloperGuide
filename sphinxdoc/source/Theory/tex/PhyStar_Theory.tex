@@ -1,0 +1,84 @@
+\documentclass[lang=cn,10pt,chinese,
+cite=authoryear]{elegantbook}
+
+\title{PhyStar理论手册}
+%\subtitle{Elegant\LaTeX{} 经典之作}
+
+\author{PhyStar项目组}
+%\institute{PhyStar项目组}
+\date{\today}
+%\version{3.10}
+\bioinfo{邮箱}{czw17@tsinghua.org.com}
+
+
+%\extrainfo{}
+
+%\logo{logo-blue.png}
+\cover{cover.jpg}
+
+% 本文档命令
+\usepackage{array}
+\newcommand{\ccr}[1]{\makecell{{\color{#1}\rule{1cm}{1cm}}}}
+\newcommand\ve[1]{\bm {#1}}
+\newcommand\ma[1]{\mathbf{#1}}
+\newcommand\obs[1]{\textcolor{red}{#1}}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+\newcommand\Partial[2]{\frac{\partial #1}{\partial #2}}
+% 修改目录深度
+\setcounter{tocdepth}{2}
+
+\begin{document}
+
+\maketitle
+\frontmatter
+
+
+\chapter*{前言}
+\markboth{Introduction}{前言}
+PhyStar是一套面向多物理场科学计算的C++库。 名称
+PhyStar由Physics(物理)和Star(星)结合而来，寓意物理之星，中文名为“星曜”。PhyStar将主要致力于多物理场问题(流体、固体、电磁、热化学、多组分和多相等)的求解，提供丰富且简易的调用接口。PhyStar将邀请相关领域优秀的年轻科学家或相关领域从业者进行合作开发与应用，致力于成为一款具有广泛影响力的计算库。 由于PhyStar初创团队长期从事流体力学以及颗粒湍流两相流的研究，因此，程序的大部分内容以及理论手册中大篇幅内容将与此有关，且大部分内容延续初创团队开发的Fortran程序PARTURB的说明文档。未来，我们希望会有更加丰富的内容进行添加，一方面作为程序的理论手册，另一方面成为前沿科学工作者的理论手册集合。
+
+作者非常感谢Elegant\LaTeX{} 项目组提供的Latex模板。
+
+
+
+\vskip 1.5cm
+
+\begin{flushright}
+作者\\
+2023 年6月 写于清华园
+\end{flushright}
+
+\clearpage
+\section*{本手册的贡献者}
+\begin{tabular}{cccc}
+	\hline 
+	姓名 &单位 &时间&主要贡献  \\ 
+	\hline 
+	崔智文 &清华大学 &2017-至今 &手册主体内容 \\  
+	\hline 
+
+\end{tabular} 
+
+
+\vskip 1.5cm
+
+
+\tableofcontents
+%\listofchanges
+
+\mainmatter
+\part{流体部分}
+%\include{./TeX_files/fluid}
+
+\part{颗粒部分}
+\include{./TeX_files/particle}
+
+\part{流固耦合}
+%\include{./TeX_files/couple}
+
+
+
+\bibliographystyle{jfm}
+\bibliography{reference}% Produces the bibliography via BibTeX.
+\end{document}
