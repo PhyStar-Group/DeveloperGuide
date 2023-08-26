@@ -5,3 +5,5 @@
    :maxdepth: 1
 
    program.md
+   program/frame.md
+   program/use_github.md
