@@ -11,3 +11,6 @@
 
 ## [规范手册](3-Specification/README.md)
 介绍PhyStar需要遵守的程序规范，命名规范等
+
+## Sphinx 文档
+后续将陆续使用Sphinx作为文档工具
