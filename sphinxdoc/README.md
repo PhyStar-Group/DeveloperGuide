@@ -23,14 +23,17 @@
         ```
     - 为支持markdown
         ```
-        pip install --upgrade recommonmark
+        pip install --upgrade myst_parser
+        pip install --upgrade sphinx_markdown_tables
         ```
     - 为了方便环境配置，我写了一个自动配置的脚本，可运行以下命令自动配置
         （待完成）
     - 如何修改了文档，可以使用以下命令编译新的html
          ```
+         make clean
          make html
          ```
     - 以上启用操作需要在sphinxdoc目录中进行
+    - 
 
 3. 如果只是查看文档，可直接打开build/html/index.html
