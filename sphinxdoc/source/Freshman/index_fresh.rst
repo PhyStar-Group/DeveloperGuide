@@ -12,5 +12,9 @@
 .. toctree::
    :maxdepth: 1
 
+   quick_start.md
+   environment.md
+   vscode_trick.md
+
 
    
