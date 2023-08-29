@@ -14,4 +14,6 @@
    index_tfft3d.rst
    index_fileio.rst
    index_solver.rst
+   third-party.md
+
    
