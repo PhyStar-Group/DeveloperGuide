@@ -23,6 +23,7 @@ PhyStar 开发手册
    :caption: 帮助:  
 
    mdstyle.md
+   toml_style.md
 
 
 Indices and tables

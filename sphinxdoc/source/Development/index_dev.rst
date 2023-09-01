@@ -13,6 +13,7 @@
    index_dmdyn.rst
    index_tfft3d.rst
    index_fileio.rst
+   index_toml.rst
    index_solver.rst
    third-party.md
 
