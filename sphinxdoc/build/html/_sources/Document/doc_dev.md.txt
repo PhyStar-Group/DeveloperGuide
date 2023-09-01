@@ -17,6 +17,11 @@
         ```
         deactivate
         ```
+    - 安装sphinx
+        ```
+        python -m pip install sphinx
+        ```
+
     - 同时，本文档采用furo主题
         ```
         pip install furo

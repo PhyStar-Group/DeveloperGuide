@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="如何利用GitHub进行协作开发" href="use_github.html" /><link rel="prev" title="架构设计思路" href="../program.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="颗粒动力学模块 – DMDyn" href="../index_dmdyn.html" /><link rel="prev" title="如何利用GitHub进行协作开发" href="use_github.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.08.19 -->
-        <title>PhyStar构建思路 - PhyStar-Dev 0.0.1 documentation</title>
+        <title>颗粒受力模型列表工作原理 - PhyStar-Dev 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -168,9 +168,9 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index_dev.html">设计与使用</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 设计与使用</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../index_program.html">程序整体设计</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 程序整体设计</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../program.html">架构设计思路</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">PhyStar构建思路</a></li>
+<li class="toctree-l3"><a class="reference internal" href="frame.html">PhyStar构建思路</a></li>
 <li class="toctree-l3"><a class="reference internal" href="use_github.html">如何利用GitHub进行协作开发</a></li>
-<li class="toctree-l3"><a class="reference internal" href="model_list.html">颗粒受力模型列表工作原理</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">颗粒受力模型列表工作原理</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../index_dmdyn.html">颗粒动力学模块 – DMDyn</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 颗粒动力学模块 – DMDyn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -249,23 +249,77 @@
           </label>
         </div>
         <article role="main">
-          <section id="phystar">
-<h1>PhyStar构建思路<a class="headerlink" href="#phystar" title="Permalink to this heading">#</a></h1>
-<section id="id1">
-<h2>运行模式<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
-<p><img alt="PhyStar构建思路" src="../../_images/PhyStar_frame.png" /></p>
-<ul class="simple">
-<li><p>PhyStar基于共享的DataSpace实现复杂的多物理场的耦合，即不同的求解模块操纵同一块数据空间。依次顺序执行，进而实现多场耦合。通常DataSpace包含了不同求解器之间公有数据，比如流场数据,网格数据等，其它求解器只是操纵这些数据。</p></li>
-<li><p>DataSpace数据共享由spaceID确定，具有相同SpaceID的求解器共享同一块内存。</p></li>
-</ul>
-</section>
+          <section id="id1">
+<h1>颗粒受力模型列表工作原理<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
 <section id="id2">
-<h2>层级结构<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
-<p><img alt="层级结构" src="../../_images/hierarchy.png" /></p>
+<h2>背景与动机<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>颗粒种类繁多，颗粒的受力模型丰富。在我们旧版本的fortran程序PARTURB中，我们通过预设颗粒模型的受力方案来区分不同种类的颗粒力，例如：</p>
+<blockquote>
+<div><p>球形：经验阻力公式+升力+重力</p>
+</div></blockquote>
+</li>
+<li><p>实际问题中，颗粒的受力模型繁多，仅阻力模型就比较多，如果仍然采用预设方案，所需要的排列组合的颗粒种类非常庞大。而在大多数情况下，科研者主要关心一些常用的组合，同时也需要能够自定义颗粒的受力的组合形式。</p></li>
+<li><p>为了进一步简化力模型添加和调用的过程。如果采用之前预设方案，需要有大段重复的代码，而且可维护性随着颗粒种类的增加而变差。我们需要一种<strong>颗粒受力模型</strong>列表，帮助我们管理模型，并且可以根据列表中的模型顺序自动化执行。</p></li>
+</ol>
 </section>
 <section id="id3">
-<h2>颗粒模型构造<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
-<p><img alt="" src="../../_images/particle_model.png" /></p>
+<h2>基本方案<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>从字典文件输入颗粒力模型和力矩模型列表
+例如</p>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">FM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Saffman&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Basset&quot;</span><span class="p">]</span>
+<span class="n">TM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Jeffery&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;FluidInertialTorque&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>以上模型的名字未来可能尽可能简写，尽可能保证3-6个字符之间</p></li>
+<li><p>对应颗粒可自定义相应的模型，例如</p></li>
+</ul>
+<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="mi">0</span><span class="o">=</span><span class="p">{</span><span class="n">ModelID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">DR</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">Radius</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="w"> </span><span class="n">AR</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">G</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">FM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">TM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">]}</span>
+<span class="mi">1</span><span class="o">=</span><span class="p">{</span><span class="n">ModelID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">DR</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">Radius</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="w"> </span><span class="n">AR</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">G</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">FM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Oseen&quot;</span><span class="p">,</span><span class="w">     </span><span class="s">&quot;Saffman&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">TM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">]}</span>
+<span class="mi">2</span><span class="o">=</span><span class="p">{</span><span class="n">ModelID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">DR</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">Radius</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="w"> </span><span class="n">AR</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">G</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">FM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;MaxeyRily&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Saffman&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Basset&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">TM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">]}</span>
+<span class="mi">3</span><span class="o">=</span><span class="p">{</span><span class="n">ModelID</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">DR</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span><span class="n">Radius</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="w"> </span><span class="n">AR</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">G</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">FM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">],</span><span class="w"> </span><span class="n">TM</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;Stokes&quot;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>其中让ModelID=1~99预留出来作为用户自定义的大类标签，比如1为自定义普通球形颗粒，2为自定义普通非球形颗粒等.</p>
+</li>
+<li><p>由程序读取列表，并解析颗粒所需力模型，在颗粒求解过程中依次执行相应的模型叠加。</p></li>
+<li><p>通过ModelID预置一些常用的组合</p>
+<p>比如三位到四位的ModelID作为预置模型，比如ModelID=105(具体以发布版本说明为准), 为惯性球形颗粒，其中颗粒受力模型为 Stokes+Saffman, 力矩模型为StokesTorque.</p>
+</li>
+</ol>
+</section>
+<section id="id4">
+<h2>实现方案<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>拟采用vector作为容器存储各个模型的指针，并与不同种类的颗粒进行绑定</p></li>
+<li><p>各个受力模型，拟采用class的继承方案，例如</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T_real</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N_dim</span><span class="o">=</span><span class="mi">3</span><span class="o">&gt;</span>
+<span class="w">    </span><span class="k">requires</span><span class="w"> </span><span class="p">(</span><span class="n">N_dim</span><span class="o">==</span><span class="mi">3</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">N_dim</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">SphereForceModel</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Stokes</span><span class="o">:</span><span class="k">public</span><span class="w"> </span><span class="n">ForceModel</span><span class="p">{</span>
+<span class="w">            </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getName</span><span class="p">(){</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;Sphere::&quot;</span><span class="o">+</span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">N_dim</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;D Stokes Force&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Force</span><span class="p">(</span><span class="n">ParticleField</span><span class="o">&lt;</span><span class="n">N_dim</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">pfield</span><span class="p">,</span><span class="w"> </span><span class="n">ParticleBase</span><span class="o">*</span><span class="w"> </span><span class="n">ptr_particle</span><span class="p">){</span>
+
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">Oseen</span><span class="o">:</span><span class="k">public</span><span class="w"> </span><span class="n">ForceModel</span><span class="p">{</span>
+<span class="w">            </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">getName</span><span class="p">(){</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;Sphere::&quot;</span><span class="o">+</span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">N_dim</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;D Oseen Force&quot;</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Force</span><span class="p">(</span><span class="n">ParticleField</span><span class="o">&lt;</span><span class="n">N_dim</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">pfield</span><span class="p">,</span><span class="w"> </span><span class="n">ParticleBase</span><span class="o">*</span><span class="w"> </span><span class="n">ptr_particle</span><span class="p">){</span>
+
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">};</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p>其中 ForceModel 为所有力模型的基类。</p>
 </section>
 </section>
 
@@ -274,23 +328,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="use_github.html">
+          <a class="next-page" href="../index_dmdyn.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">如何利用GitHub进行协作开发</div>
+                <div class="title">颗粒动力学模块 – DMDyn</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../program.html">
+          <a class="prev-page" href="use_github.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">架构设计思路</div>
+                <div class="title">如何利用GitHub进行协作开发</div>
                 
               </div>
             </a>
@@ -324,10 +378,10 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">PhyStar构建思路</a><ul>
-<li><a class="reference internal" href="#id1">运行模式</a></li>
-<li><a class="reference internal" href="#id2">层级结构</a></li>
-<li><a class="reference internal" href="#id3">颗粒模型构造</a></li>
+<li><a class="reference internal" href="#">颗粒受力模型列表工作原理</a><ul>
+<li><a class="reference internal" href="#id2">背景与动机</a></li>
+<li><a class="reference internal" href="#id3">基本方案</a></li>
+<li><a class="reference internal" href="#id4">实现方案</a></li>
 </ul>
 </li>
 </ul>

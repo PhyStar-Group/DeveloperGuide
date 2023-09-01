@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="设计与使用" href="../Development/index_dev.html" /><link rel="prev" title="环境配置" href="environment.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Markdown 例子" href="../mdstyle.html" /><link rel="prev" title="算例手册" href="index_exam.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.08.19 -->
-        <title>利用VSCode进行开发 - PhyStar-Dev 0.0.1 documentation</title>
+        <title>均匀各向同性湍流中的颗粒研究 - PhyStar-Dev 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -156,13 +156,13 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">手册内容:</span></p>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index_fresh.html">入门手册</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 入门手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html">快速开始</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#id3">辅助文档</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#tests">Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quick_start.html#id4">常见问题</a></li>
-<li class="toctree-l2"><a class="reference internal" href="environment.html">环境配置</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">利用VSCode进行开发</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Freshman/index_fresh.html">入门手册</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 入门手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/quick_start.html">快速开始</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/quick_start.html#id3">辅助文档</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/quick_start.html#tests">Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/quick_start.html#id4">常见问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/environment.html">环境配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Freshman/vscode_trick.html">利用VSCode进行开发</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../Development/index_dev.html">设计与使用</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 设计与使用</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -206,8 +206,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../Document/doc_dev.html">Sphinx 启用流程</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ExampleCases/index_exam.html">算例手册</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of 算例手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../ExampleCases/spec_hit.html">均匀各向同性湍流中的颗粒研究</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index_exam.html">算例手册</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of 算例手册</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">均匀各向同性湍流中的颗粒研究</a></li>
 </ul>
 </li>
 </ul>
@@ -249,72 +249,16 @@
           </label>
         </div>
         <article role="main">
-          <section id="vscode">
-<h1>利用VSCode进行开发<a class="headerlink" href="#vscode" title="Permalink to this heading">#</a></h1>
-<section id="id1">
-<h2>VSCode必备插件<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
-<section id="c-c">
-<h3>C/C++<a class="headerlink" href="#c-c" title="Permalink to this heading">#</a></h3>
-<p>C/C++基础插件。提供语法高亮，Intellisense等基础功能。</p>
-<blockquote>
-<div><p>Description: C/C++ IntelliSense, debugging, and code browsing.</p>
-</div></blockquote>
-<blockquote>
-<div><p>VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools</p>
-</div></blockquote>
-</section>
-<section id="cmake-tools">
-<h3>CMake Tools<a class="headerlink" href="#cmake-tools" title="Permalink to this heading">#</a></h3>
-<p>用于在VSCode中方便地执行Cmake设置，快捷切换编译模式、编译目标，自定义编译选项。</p>
-<blockquote>
-<div><p>Description: Extended CMake support in Visual Studio Code</p>
-</div></blockquote>
-<blockquote>
-<div><p>VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools</p>
-</div></blockquote>
-</section>
-<section id="remote-ssh">
-<h3>远程开发插件Remote - SSH<a class="headerlink" href="#remote-ssh" title="Permalink to this heading">#</a></h3>
-<p>用于远程连接linux服务器开发。源代码、编译、编译产生的文件均位于服务器，便于调试和测试环境。</p>
-<blockquote>
-<div><p>Description: Open any folder on a remote machine using SSH and take advantage of VS Code’s full feature set.</p>
-</div></blockquote>
-<blockquote>
-<div><p>VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh</p>
-</div></blockquote>
-</section>
-</section>
-<section id="vscodephystar">
-<h2>开始使用VSCode开发PhyStar<a class="headerlink" href="#vscodephystar" title="Permalink to this heading">#</a></h2>
+          <section id="id1">
+<h1>均匀各向同性湍流中的颗粒研究<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
 <section id="id2">
-<h3>首次打开<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>使用远程插件或直接打开PhyStar顶层文件夹。</p></li>
-<li><p>确认所有必备插件已开启。</p></li>
-<li><p>VSCode将自动弹出输入框，选择你想要编译的CMakeLists.txt文件，例如<code class="docutils literal notranslate"><span class="pre">PhyStar/example/simpleflow/CMakeLists.txt</span></code>。如果错过了输入框，可以按Ctrl+Shift+P，输入<code class="docutils literal notranslate"><span class="pre">CMake:</span> <span class="pre">Configure</span></code>重新进行操作。</p></li>
-<li><p>此时有可能遇到错误<code class="docutils literal notranslate"><span class="pre">vscode</span> <span class="pre">[ctest]</span> <span class="pre">Folder</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">Test</span> <span class="pre">Explorer</span></code>，按Ctrl+Shift+P，<code class="docutils literal notranslate"><span class="pre">reload</span> <span class="pre">window</span></code>即可顺利进行初次Configure。</p></li>
-<li><p>按Ctrl+Shift+P，打开VSCode设置栏，查找<code class="docutils literal notranslate"><span class="pre">settings.json</span></code>，选择<code class="docutils literal notranslate"><span class="pre">Workspace</span></code>范围的JSON，加入以下的设置</p></li>
-</ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="s2">&quot;cmake.configureArgs&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;-DFFTW3_ROOT=/opt/fftw3/&quot;</span>
-    <span class="p">],</span><span class="o">//</span> <span class="n">设置CMake</span> <span class="n">configure时的fftw3目录</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="6">
-<li><p>若Intenllisense无法正常工作，在<code class="docutils literal notranslate"><span class="pre">settings.json</span></code>中加入下面的设置</p></li>
-</ol>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;C_Cpp.default.compileCommands&quot;</span><span class="p">:</span> <span class="s2">&quot;${config:cmake.buildDirectory}/compile_commands.json&quot;</span><span class="p">,</span> <span class="o">//</span> <span class="n">设置intellisense的包含范围</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="7">
-<li><p>在VSCode下方工具栏找到CMake选项，将编译选项设置为Release。选择CMake编译器，和你实际使用的编译器一致。</p></li>
-<li><p>此时，Intellisense应该能够准确识别和检测代码中的语法和错误，开始愉快的开发之旅吧！</p></li>
-</ol>
+<h2>均匀各向同性湍流设置<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="id3">
-<h3>使用技巧<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
-<p>由于PhyStar的项目结构存在多个编译目标（多个可用于编译的CMakeLists.txt），可以修改<code class="docutils literal notranslate"><span class="pre">settings.json</span></code>中的<code class="docutils literal notranslate"><span class="pre">cmake.sourceDirectory</span></code>选项来指定你想要编译的目标目录。修改目录后需要reload避免奇怪的bug。</p>
+<h2>颗粒设置<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
 </section>
+<section id="id4">
+<h2>注意事项<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -323,23 +267,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../Development/index_dev.html">
+          <a class="next-page" href="../mdstyle.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">设计与使用</div>
+                <div class="title">Markdown 例子</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="environment.html">
+          <a class="prev-page" href="index_exam.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">环境配置</div>
+                <div class="title">算例手册</div>
                 
               </div>
             </a>
@@ -373,18 +317,10 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">利用VSCode进行开发</a><ul>
-<li><a class="reference internal" href="#id1">VSCode必备插件</a><ul>
-<li><a class="reference internal" href="#c-c">C/C++</a></li>
-<li><a class="reference internal" href="#cmake-tools">CMake Tools</a></li>
-<li><a class="reference internal" href="#remote-ssh">远程开发插件Remote - SSH</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#vscodephystar">开始使用VSCode开发PhyStar</a><ul>
-<li><a class="reference internal" href="#id2">首次打开</a></li>
-<li><a class="reference internal" href="#id3">使用技巧</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">均匀各向同性湍流中的颗粒研究</a><ul>
+<li><a class="reference internal" href="#id2">均匀各向同性湍流设置</a></li>
+<li><a class="reference internal" href="#id3">颗粒设置</a></li>
+<li><a class="reference internal" href="#id4">注意事项</a></li>
 </ul>
 </li>
 </ul>
