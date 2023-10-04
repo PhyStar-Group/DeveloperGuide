@@ -248,4 +248,4 @@ TSWLatexianTemp*
 # generated if using elsarticle.cls
 *.spl
 
-/build/*
+sphinxdoc/build/*
