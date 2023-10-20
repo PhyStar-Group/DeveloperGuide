@@ -5,3 +5,4 @@
    :maxdepth: 1
 
    mod_smartplist.md
+   mod_kdtree_Contact.md
