@@ -1,3 +1,4 @@
 # smartplist 设计
 具体代码实现请见DMDyn/DataStruct/smartplist.hpp
 
+smartplist用来存储计算过程中由本进程所负责的所有颗粒以及本进程所负责的所有颗粒和邻近进程所负责的颗粒中有可能发生相互作用的颗粒，这里称后者为“虚拟颗粒”。
