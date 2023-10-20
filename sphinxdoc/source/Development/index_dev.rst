@@ -15,6 +15,8 @@
    index_fileio.rst
    index_toml.rst
    index_solver.rst
+   index_parallel.rst
+   index_CompGeo.rst
    third-party.md
 
    
