@@ -3,3 +3,7 @@
 
 .. toctree::
    :maxdepth: 1
+
+   mod_SolverBase.md
+   mod_CartDataSpace.md
+   mod_particleSolver.md
