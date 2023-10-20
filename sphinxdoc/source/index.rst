@@ -24,6 +24,7 @@ PhyStar 开发手册
 
    mdstyle.md
    toml_style.md
+   mod_mpi.md
 
 
 Indices and tables
