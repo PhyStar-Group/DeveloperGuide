@@ -3,3 +3,5 @@
 
 .. toctree::
    :maxdepth: 1
+
+   mod_tfft3d.md
