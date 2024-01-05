@@ -13,7 +13,7 @@ PhyStar 开发手册
    Freshman/index_fresh.rst
    Development/index_dev.rst
    Specification/index_spec.rst
-   Theory/theory.md
+   Theory/index_theory.rst
    Tests/index_test.rst
    Document/index_doc.rst
    ExampleCases/index_exam.rst
@@ -25,6 +25,7 @@ PhyStar 开发手册
    mdstyle.md
    toml_style.md
    mod_mpi.md
+   environment.md
 
 
 Indices and tables
