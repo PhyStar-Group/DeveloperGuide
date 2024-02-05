@@ -1,28 +1,41 @@
-\chapter{流体模拟理论}
+\chapter{流体模拟}
 \section{基本方程}
-\subsection{不可压缩湍流}
+\subsection{不可压缩流动控制方程}
 \begin{equation}\label{eq:ch1-ns}
-\begin{split}
-\frac{\partial \ve {u}}{\partial t}+\ve{u} \cdot \nabla \ve{u}&=-\nabla p / \rho+\nu \nabla^{2} \ve{u}+\ve{f}\\
-\nabla \cdot \ve{u}&=0
-\end{split}
+	\begin{split}
+		\frac{\partial \ve {u}}{\partial t}+\ve{u} \cdot \nabla \ve{u}&=-\nabla p / \rho+\nu \nabla^{2} \ve{u}+\ve{f}\\
+		\nabla \cdot \ve{u}&=0
+	\end{split}
 \end{equation}
 其中$\ve u$是湍流脉动速度, $p$ 是压强脉动, $\nu$ 是运动粘度, $\ve f$是体积力.
 
-介绍其它可能形式
-\subsection{可压缩湍流}
+\section{CartBoxFFT三方向周期傅里叶求解器}
+\subsection{空间离散}
+此类求解器需要流场在三个方向均满足周期边界条件,且网格均匀分布。三个方向的网格数记为$N_x, N_y$和$N_z$。此时，在三个方向均采用伪谱方法进行空间离散。
+\paragraph*{傅里叶变换}
+任意物理空间的物理量$a$可通过三维快速傅里叶变换转到谱空间，记为$\hat{a}$, 即
+\begin{equation}
+	\hat{a}(p,q,r)=\sum_{k=0}^{N_z-1}\sum_{j=0}^{N_y-1}\sum_{i=0}^{N_x-1} a(i,j,k)e^{-\text{i}px(i)\frac{2\pi}{L_x}-\text{i}qy(j)\frac{2\pi}{L_y}-\text{i}rz(k)\frac{2\pi}{L_z}}
+\end{equation}
+可记为$\hat{a}=\mathcal{F}(a)$。其中$p,q,r$为谱空间三个方向的谱波数，其波数范围分别为$[-N_x/2+1,N_x/2]$, $[-N_y/2+1,N_y/2]$和$[-N_z/2+1,N_z/2]$。同理，谱空间变量$\hat{a}$可通过傅里叶逆变换转换到物理空间$a$, 即
+\begin{equation}
+	a(i,j,k)=\frac{1}{N_xN_yN_z}\sum_{r=-N_z/2+1}^{N_z/2}\sum_{q=-N_y/2+1}^{N_y/2}\sum_{p=-N_x/2+1}^{N_x/2} \hat{a}(p,q,r)e^{\text{i}px(i)\frac{2\pi}{L_x}+\text{i}qy(j)\frac{2\pi}{L_y}+\text{i}rz(k)\frac{2\pi}{L_z}}
+\end{equation}
+记为$a=\mathcal{F}^{-1}(\hat{a})$
 
-\subsection{大涡模拟}
+\paragraph*{伪谱法与消除混淆误差}
+对于非线性项，例如$a\cdot b$, 需要先将$a$与$b$在谱空间将波数范围扩充至$[-3N_x/2+1,3N_x/2]$, $[-3N_y/2+1,3N_y/2]$和$[-3N_z/2+1,3N_z/2]$，再通过傅里叶逆变换至物理空间，记为$\tilde{a}$ 和$\tilde{b}$。在物理空间进行乘法积后，对$\tilde{a}\cdot\tilde{b}$进行傅里叶变换，并将波数缩减到$[-N_x/2+1,N_x/2]$, $[-N_y/2+1,N_y/2]$和$[-N_z/2+1,N_z/2]$，而之外的波数被赋零截断。这种伪谱方法的操作记为$\mathcal{F}_{quasi}(\cdot)$。对应的原理示意图见\obs{FIG}。对混淆误差的消除步骤已经内置于TFFT3D程序包，可以通过设置网格数量直接实现混淆误差的消除。
 
-\section{时间离散}
-\subsection{模拟方法}
+
+\subsection{时间离散}
+\paragraph*{方案1}\quad\\
 参考Challabotla 博士论文的方法，即
 \begin{equation}
-	\frac{u_i^{n+1}-u_i^n}{\Delta t}=\frac{3}{2}T(u_i^n)-\frac{1}{2}T(u_i^{n-1})-\frac{1}{\rho}\frac{\partial p^{n+1}}{ \partial x_i}
+	\frac{\hat u_i^{n+1}-\hat u_i^n}{\Delta t}=\frac{3}{2}T(u_i^n)-\frac{1}{2}T(u_i^{n-1})-\frac{1}{\rho}\frac{\partial \hat p^{n+1}}{ \partial x_i}
 \end{equation}
 其中
 \begin{equation}
-	T(u_i^n)=-u_j^n\frac{\partial u_i^n}{\partial x_j}+\nu\frac{\partial^2 u_i^n}{\partial x_j \partial x_j}
+	T(u_i^n)=-\frac{\partial \mathcal{F}_{quasi}(u_i^n u_j^n)}{\partial x_j}+\nu\frac{\partial^2 \hat u_i^n}{\partial x_j \partial x_j}+\hat{f}_i^n
 \end{equation}
 求解步骤：\\
 第一步：求解中间步 $u^*$并忽略压力$p^n$,
@@ -30,17 +43,17 @@
 \frac{u_i^{*}-u_i^n}{\Delta t}=\frac{3}{2}T(u_i^n)-\frac{1}{2}T(u_i^{n-1})
 \end{equation}
 第二步: 求解压力步$p^{n+1}$,
-\begin{equation}
+\begin{equation}\label{eq:fluid-pressure-step}
 \nabla^2p^{n+1}=\frac{\rho \nabla\cdot u^*}{\Delta t}
 \end{equation}
 第三步：求解速度$u_i^{n+1}$
-\begin{equation}
+\begin{equation}\label{eq:fluid-correct-step}
 u_i^{n+1}-u^*=-\Delta t\frac{\partial p^{n+1}}{\partial x_i}
 \end{equation}
 
-\subsection{空间离散}
+值得注意的是，公式~(\ref{eq:fluid-pressure-step}) 和(\ref{eq:fluid-correct-step})可使得流场无散。可证明，将式(\ref{eq:fluid-correct-step})两侧同时求散度，若$\ve \nabla \cdot \ve u_i^{n+1}=0$， 可得到式~(\ref{eq:fluid-pressure-step})。
 
-\section{典型流体问题}
+
 \subsection{均匀各向同性湍流}
 \subsubsection{流场初始化方法}
 采用\citet{rogallo_numerical_1981}初始化方法：
@@ -51,12 +64,12 @@ u_i^{n+1}-u^*=-\Delta t\frac{\partial p^{n+1}}{\partial x_i}
 	-\beta(k)(k_1^2+k_2^2)
 	\end{array}\right) 
 \end{equation}
-其中$k=\sqrt{k_1^2+k_2^2+k_3^2}$, $\alpha(k)=\sqrt{\frac{E(k)}{4\pi k^2}}\exp{i\theta_1}\cos\phi$, 而 $\beta(k)=\sqrt{\frac{E(k)}{4\pi k^2}}\exp{i\theta_2}\cos\phi$. $\theta_1$,$\theta_2$与$\phi$为[0,$2\pi$]之间的随机数。同时，我们也需要给定初始能谱$E(k)$, 在本程序中，默认能谱\citep{sullivan_deterministic_1994}
+其中$k=\sqrt{k_1^2+k_2^2+k_3^2}$, $\alpha(k)=\sqrt{\frac{E(k)}{4\pi k^2}}\exp(i\theta_1)\cos\phi$, 而 $\beta(k)=\sqrt{\frac{E(k)}{4\pi k^2}}\exp(i\theta_2)\cos\phi$. $\theta_1$,$\theta_2$与$\phi$为[0,$2\pi$]之间的随机数。同时，我们也需要给定初始能谱$E(k)$, 在本程序中，默认能谱\citep{sullivan_deterministic_1994}
 \begin{equation}
 E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_p}^2)}
 \end{equation}
 \subsubsection{强迫各向同性湍流：加力方法}
-\noindent \textbf{低波数加力}\\
+\paragraph*{低波数加力}
 只在大尺度部分添加能量，具体形式如下\citep{machiels_predictability_1997}
 \begin{equation}
 	\hat{\ve f}=\left\lbrace \begin{array}{c}
@@ -64,8 +77,8 @@ E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_
 	0,\quad \text{otherwise}
 	\end{array}\right. 
 \end{equation}
-程序中的默认加力形式，其中默认加力波数范围1$\sim$2，$\frac{\varepsilon}{2E_f}=0.5$
-\noindent \textbf{线性加力}\\
+程序中的默认加力形式，其中默认加力波数范围1$\sim$2，$\frac{\varepsilon}{2E_f}=0.5$。
+\paragraph*{线性加力}
 在所有尺度上添加能量，此方法常用于有限差分方法，即\citep{lundgren_linearly_2003,rosales_linear_2005},
 \begin{equation}
 \hat{\ve f}=\frac{\varepsilon}{2E}\hat{\ve u}
@@ -89,105 +102,108 @@ E(k)=\frac{q^2}{2A}\frac{k_p}{k_p ^{\sigma+1}}\exp{(-\frac{\sigma}{2}\frac{k}{k_
 	
 \end{tabular} 
 
-\subsection{均匀剪切湍流}
-\subsubsection{基本方程}
-$\ve u =\ve U+\ve u'$
-平均速度为：
-$U_1=0$, $U_2=Sx_1$,和 $U_3=0$.
-\begin{equation}
-\begin{split}
-\frac{\partial  {u'}}{\partial t}+Sx_1\frac{\partial u_i'}{\partial x_2}+S\delta_{i2}{u'_1}+u'_j\frac{\partial u'_i}{\partial x_j} &=-\frac{1}{\rho} \frac{\partial p}{\partial x_i}+\nu \frac{\partial^2 u'_i}{\partial x_j\partial x_j}\\
-\frac{\partial u'_i}{\partial x_i}&=0
-\end{split}
-\end{equation}
-其中$\ve u'$是湍流脉动速度, $p$ 是压强脉动, $\nu$ 是运动粘度, $S$是平均剪切率.
-\subsection{计算方法}
-\begin{itemize}
-	\item 标准计算域：$2\pi\times2\pi\times2\pi$ 或者 $2\pi\times4\pi\times2\pi$ (可修改)
-	\item 空间格式: 伪谱法
-	\item  时间格式：二阶显示Adams-Bashforth 格式
-\end{itemize}
-\subsection{剪切周期边界条件}
-对于当前的设置，剪切平面在$x$-$y$平面，其中$x$是剪切周期方向。那么对于任意物理量，满足：
-\begin{equation}
-\phi(x,y,z)=\phi(x+L_x,y+L_xSt,z)
-\end{equation}
-在计算的过程中，如果需要时刻保证剪切周期边界条件，需要对网格进行变换。
-\citet{rogallo_numerical_1981}通过对网格的变换，将网格转换到三轴都是周期边界条件的网格中，此时便可以对三个方向同时进行傅里叶变换。但这种变换并不能保证长时间有效的计算。在计算过程中，需要不断地对网格进行重新变换。如果为了避免网格变换，可以采用\citet{brucker_efficient_2007}的方法(本程序默认方法)。该方法通过在傅里叶变换中进行相位平移的方法避免了对网格的重新变换。具体变换过程如下：
-\subsubsection*{FFT正变换}
-\textbf{Step1}: 先对周期方向($y$与$z$方向)进行傅里叶变换。
-\begin{equation}
-	\check{\phi}(x,k_y,k_z)=\sum_{k_y} \sum_{k_z}\phi(x,y,z)\exp[-i(k_yy+k_zz)]
-\end{equation}
-\qquad\textbf{Step2}: 在x方向进行相位平移。
-\begin{equation}
-\tilde{\phi}(x,k_y,k_z)=\check{\phi}(x,k_y,k_z)\exp[iStk_yx]
-\end{equation}
-\qquad\textbf{Step3}: 做x方向的傅里叶变换。
-\begin{equation}
-\hat{\phi}(k_x,k_y,k_z)=\sum_{k_x}\tilde{\phi}(x,k_y,k_z)\exp[-ik_xx]
-\end{equation}
-同时，用$\mathcal{F}\left\lbrace \right\rbrace $表示这一过程。
-\subsubsection*{FFT逆变换}
-\textbf{Step1}: 先对$x$方向进行傅里叶逆变换。
-\begin{equation}
-\tilde{\phi}(x,k_y,k_z)=\frac{1}{N_x}\sum_{k_x}\hat\phi(k_x,k_y,k_z)\exp[i(k_xx)]
-\end{equation}
-\qquad\textbf{Step2}: 在x方向进行相位平移。
-\begin{equation}
-\check{\phi}(x,k_y,k_z)=\tilde{\phi}(x,k_y,k_z)\exp[-iStk_yx]
-\end{equation}
-\qquad\textbf{Step3}: 做y,z方向的傅里叶逆变换。
-\begin{equation}
-{\phi}(x,y,z)=\frac{1}{N_yN_z}\sum_{k_y} \sum_{k_z}\check{\phi}(x,k_y,k_z)\exp[i(k_yy+k_zz)]
-\end{equation}
-\subsubsection*{谱空间的波数}
-在均匀各向同性湍流中， 在谱空间的波数由$k_x,k_y$与$k_z$表示，但对于均匀剪切湍流，波数$k_i$代表的是网格转到三个方向都是周期时的波数。并不是实际网格中的波数情况。此时，我们通过$k_i'=k_i-Stk_y\delta_{ix}$，此时可以认为在真实剪切湍流问题中的波数。其中，梯度算子和laplace算子都与各向同性湍流一样，只不过将$k_i$统一用$k_i'$替换即可。
-\subsubsection*{谱空间中的NS方程}
-时间导数：
-\begin{equation}
-\mathcal{F}\left\lbrace\frac{\partial \hat{u}_i'}{\partial t}\right\rbrace=\frac{\partial u_i'}{\partial t}-ISk_yx\hat{u}_i
-\end{equation}
-\qquad 空间梯度：
-\begin{equation}
-\mathcal{F}\left\lbrace\frac{\partial u_j'}{\partial x_i}\right\rbrace=Ik_i'\hat{u}_j.
-\end{equation}
-为了方便对比均匀各向同性湍流与均匀剪切湍流在谱空间中的不同，现将谱空间中的不可压缩NS方程表达如下：
-\begin{equation}
-\frac{\partial \hat{u}_i'}{\partial t}-Ik_j'\mathcal{F}\left\lbrace{u_i'u_j'}\right\rbrace=-Ik_i'\hat{p}^*-\nu k^2 \hat{u}_i-S\delta_{iy}\hat{u}_x\end{equation}
-\subsection{时间分裂形式}
-与各向同性湍流的类似，在此不再赘述。
-\subsection{流场初始化方法}
-与各向同性湍流的类似，在此不再赘述。
+%\subsection{均匀剪切湍流}
+%\subsubsection{基本方程}
+%$\ve u =\ve U+\ve u'$
+%平均速度为：
+%$U_1=0$, $U_2=Sx_1$,和 $U_3=0$.
+%\begin{equation}
+%\begin{split}
+%\frac{\partial  {u'}}{\partial t}+Sx_1\frac{\partial u_i'}{\partial x_2}+S\delta_{i2}{u'_1}+u'_j\frac{\partial u'_i}{\partial x_j} &=-\frac{1}{\rho} \frac{\partial p}{\partial x_i}+\nu \frac{\partial^2 u'_i}{\partial x_j\partial x_j}\\
+%\frac{\partial u'_i}{\partial x_i}&=0
+%\end{split}
+%\end{equation}
+%其中$\ve u'$是湍流脉动速度, $p$ 是压强脉动, $\nu$ 是运动粘度, $S$是平均剪切率.
+%\subsection{计算方法}
+%\begin{itemize}
+%	\item 标准计算域：$2\pi\times2\pi\times2\pi$ 或者 $2\pi\times4\pi\times2\pi$ (可修改)
+%	\item 空间格式: 伪谱法
+%	\item  时间格式：二阶显示Adams-Bashforth 格式
+%\end{itemize}
+%\subsection{剪切周期边界条件}
+%对于当前的设置，剪切平面在$x$-$y$平面，其中$x$是剪切周期方向。那么对于任意物理量，满足：
+%\begin{equation}
+%\phi(x,y,z)=\phi(x+L_x,y+L_xSt,z)
+%\end{equation}
+%在计算的过程中，如果需要时刻保证剪切周期边界条件，需要对网格进行变换。
+%\citet{rogallo_numerical_1981}通过对网格的变换，将网格转换到三轴都是周期边界条件的网格中，此时便可以对三个方向同时进行傅里叶变换。但这种变换并不能保证长时间有效的计算。在计算过程中，需要不断地对网格进行重新变换。如果为了避免网格变换，可以采用\citet{brucker_efficient_2007}的方法(本程序默认方法)。该方法通过在傅里叶变换中进行相位平移的方法避免了对网格的重新变换。具体变换过程如下：
+%\subsubsection*{FFT正变换}
+%\textbf{Step1}: 先对周期方向($y$与$z$方向)进行傅里叶变换。
+%\begin{equation}
+%	\check{\phi}(x,k_y,k_z)=\sum_{k_y} \sum_{k_z}\phi(x,y,z)\exp[-i(k_yy+k_zz)]
+%\end{equation}
+%\qquad\textbf{Step2}: 在x方向进行相位平移。
+%\begin{equation}
+%\tilde{\phi}(x,k_y,k_z)=\check{\phi}(x,k_y,k_z)\exp[iStk_yx]
+%\end{equation}
+%\qquad\textbf{Step3}: 做x方向的傅里叶变换。
+%\begin{equation}
+%\hat{\phi}(k_x,k_y,k_z)=\sum_{k_x}\tilde{\phi}(x,k_y,k_z)\exp[-ik_xx]
+%\end{equation}
+%同时，用$\mathcal{F}\left\lbrace \right\rbrace $表示这一过程。
+%\subsubsection*{FFT逆变换}
+%\textbf{Step1}: 先对$x$方向进行傅里叶逆变换。
+%\begin{equation}
+%\tilde{\phi}(x,k_y,k_z)=\frac{1}{N_x}\sum_{k_x}\hat\phi(k_x,k_y,k_z)\exp[i(k_xx)]
+%\end{equation}
+%\qquad\textbf{Step2}: 在x方向进行相位平移。
+%\begin{equation}
+%\check{\phi}(x,k_y,k_z)=\tilde{\phi}(x,k_y,k_z)\exp[-iStk_yx]
+%\end{equation}
+%\qquad\textbf{Step3}: 做y,z方向的傅里叶逆变换。
+%\begin{equation}
+%{\phi}(x,y,z)=\frac{1}{N_yN_z}\sum_{k_y} \sum_{k_z}\check{\phi}(x,k_y,k_z)\exp[i(k_yy+k_zz)]
+%\end{equation}
+%\subsubsection*{谱空间的波数}
+%在均匀各向同性湍流中， 在谱空间的波数由$k_x,k_y$与$k_z$表示，但对于均匀剪切湍流，波数$k_i$代表的是网格转到三个方向都是周期时的波数。并不是实际网格中的波数情况。此时，我们通过$k_i'=k_i-Stk_y\delta_{ix}$，此时可以认为在真实剪切湍流问题中的波数。其中，梯度算子和laplace算子都与各向同性湍流一样，只不过将$k_i$统一用$k_i'$替换即可。
+%\subsubsection*{谱空间中的NS方程}
+%时间导数：
+%\begin{equation}
+%\mathcal{F}\left\lbrace\frac{\partial \hat{u}_i'}{\partial t}\right\rbrace=\frac{\partial u_i'}{\partial t}-ISk_yx\hat{u}_i
+%\end{equation}
+%\qquad 空间梯度：
+%\begin{equation}
+%\mathcal{F}\left\lbrace\frac{\partial u_j'}{\partial x_i}\right\rbrace=Ik_i'\hat{u}_j.
+%\end{equation}
+%为了方便对比均匀各向同性湍流与均匀剪切湍流在谱空间中的不同，现将谱空间中的不可压缩NS方程表达如下：
+%\begin{equation}
+%\frac{\partial \hat{u}_i'}{\partial t}-Ik_j'\mathcal{F}\left\lbrace{u_i'u_j'}\right\rbrace=-Ik_i'\hat{p}^*-\nu k^2 \hat{u}_i-S\delta_{iy}\hat{u}_x\end{equation}
+%\subsection{时间分裂形式}
+%与各向同性湍流的类似，在此不再赘述。
+%\subsection{流场初始化方法}
+%与各向同性湍流的类似，在此不再赘述。
+%
+%\subsection{常见统计量}
+%基本与各向同性湍流保持不变，但也引入一些与剪切率相关的统计量
+%
+%\begin{tabular}{cc}
+%	\hline 
+%	统计量&计算表达式\\
+%	\hline 
+%	湍动能&$E=\frac{1}{2}\langle\ve u\cdot \ve u\rangle=\frac{3}{2}u'^2=\int_0^{k_{max}}E(k)dk $  \\ 
+%	单位质量的平均能量耗散率 &$\varepsilon=2\nu \int_{0}^{k_{max}}k^2E(k)dk$ \\  
+%	积分长度 &$L=\frac{\pi}{2u'^2}\int_{0}^{k_{max}}k^{-1}E(k)dk$  \\ 
+%	泰勒微尺度 &$\lambda=(\frac{15\nu u'^2}{\varepsilon})^{1/2}$     \\ 
+%	Kolmogorov 长度尺度 &$\eta=(\frac{\nu^3}{\varepsilon})^{1/4}$     \\ 
+%	Eddy turnover time   &$T=L/u'$  \\ 
+%	Kolmogorov 时间尺度 &$\tau_\eta=(\frac{\nu}{\varepsilon})^{1/2}$\\
+%	基于泰勒微尺度的雷诺数&$Re_\lambda=\frac{u'\lambda}{\nu}$\\
+%	基于积分尺度与u'的能量耗散率&$a=\frac{\varepsilon L}{u'^3}$\\
+%	\hline 
+%	
+%\end{tabular} 
+\section{CartBoxFFD 傅里叶-差分求解器}
+\subsection{空间离散}
+\subsection{时间离散}
 
-\subsection{常见统计量}
-基本与各向同性湍流保持不变，但也引入一些与剪切率相关的统计量
-
-\begin{tabular}{cc}
-	\hline 
-	统计量&计算表达式\\
-	\hline 
-	湍动能&$E=\frac{1}{2}\langle\ve u\cdot \ve u\rangle=\frac{3}{2}u'^2=\int_0^{k_{max}}E(k)dk $  \\ 
-	单位质量的平均能量耗散率 &$\varepsilon=2\nu \int_{0}^{k_{max}}k^2E(k)dk$ \\  
-	积分长度 &$L=\frac{\pi}{2u'^2}\int_{0}^{k_{max}}k^{-1}E(k)dk$  \\ 
-	泰勒微尺度 &$\lambda=(\frac{15\nu u'^2}{\varepsilon})^{1/2}$     \\ 
-	Kolmogorov 长度尺度 &$\eta=(\frac{\nu^3}{\varepsilon})^{1/4}$     \\ 
-	Eddy turnover time   &$T=L/u'$  \\ 
-	Kolmogorov 时间尺度 &$\tau_\eta=(\frac{\nu}{\varepsilon})^{1/2}$\\
-	基于泰勒微尺度的雷诺数&$Re_\lambda=\frac{u'\lambda}{\nu}$\\
-	基于积分尺度与u'的能量耗散率&$a=\frac{\varepsilon L}{u'^3}$\\
-	\hline 
-	
-\end{tabular} 
-
-\section{槽道湍流}
+\subsection{槽道湍流}
 \begin{figure}[h]
 		\centering
 	\includegraphics[width=0.7\linewidth]{figure/part1_channel}
 	\caption{槽道湍流示意图}
 	\label{fig:part1channel}
 \end{figure}
-\subsection{基本方程}
+\subsubsection{基本方程}
 
 \begin{equation}
 \begin{split}
@@ -204,14 +220,14 @@ $U_1=0$, $U_2=Sx_1$,和 $U_3=0$.
 	\item 支持定流量(程序默认)或定压力梯度的Poiseuille 流动
 \end{itemize}
 
-\subsection{时间分裂形式}
+\subsubsection{时间分裂形式}
 与各向同性湍流的类似，在此不再赘述。
-\subsection{流场初始化方法}
+\subsubsection{流场初始化方法}
 初始时刻，采用平均速度$+$上下壁面条带$+$随机扰动的方式。
 
 平均速度剖面：
 \begin{equation}
-U(y^+)=2.5\log_{10}{y^+}+5.5
+U(z^+)=2.5\log_{10}{z^+}+5.5
 \end{equation}
 
 壁面条带扰动:
@@ -219,61 +235,61 @@ U(y^+)=2.5\log_{10}{y^+}+5.5
 \begin{equation}
 \begin{split}
 u_s(i,j,k)&=\frac{\alpha}{\delta}\sqrt{e}y^+e^{-\frac{1}{\delta^2}{y^+}^2}\cos{\frac{L_z^+}{l_z^+}\frac{2\pi k}{N_z}}\\
-v_s(i,j,k)&=0;\\
-w_s(i,j,k)&=\frac{\alpha}{\delta}\sqrt{e}y^+e^{-\frac{1}{\delta^2}{y^+}^2}\cos{\frac{L_x^+}{l_x^+}\frac{2\pi i}{N_x}}.\\
+v_s(i,j,k)&=\frac{\alpha}{\delta}\sqrt{e}y^+e^{-\frac{1}{\delta^2}{y^+}^2}\sin{\frac{L_x^+}{l_x^+}\frac{2\pi i}{N_x}}.\\
+w_s(i,j,k)&=0;\\
 \end{split}
 \end{equation}
-这里的参数$\alpha=15$，$\delta=50$，$l_x=300$,$l_z=100$.这些值均为经验参数，且可能与一些文献有出入，但不影响湍流最终的发展。
+这里的参数$\alpha=15$，$\delta=50$，$l_x^+=300$,$l_z^+=100$。这些值均为经验参数，且可能与一些文献有出入，但不影响湍流最终的发展。
 
-\section{基于贴体网格的槽道求解器}
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.7\linewidth]{figure/part1_moving_channel}
-	\caption{波形壁槽道湍流示意图}
-	\label{fig:part1movingchannel}
-\end{figure}
-\begin{equation}
-t=\tau, x_1=\xi_1, x_2=(\xi_2-1)(1+\eta_-)+(\eta_+ +1),x_3=\xi_3
-\end{equation}
-其中
+%\section{基于贴体网格的槽道求解器}
+%\begin{figure}[h]
+%	\centering
+%	\includegraphics[width=0.7\linewidth]{figure/part1_moving_channel}
+%	\caption{波形壁槽道湍流示意图}
+%	\label{fig:part1movingchannel}
+%\end{figure}
+%\begin{equation}
+%t=\tau, x_1=\xi_1, x_2=(\xi_2-1)(1+\eta_-)+(\eta_+ +1),x_3=\xi_3
+%\end{equation}
+%其中
 
-\begin{equation}
-\eta_-=\frac{1}{2}(\eta_u-\eta_b), \eta_+ =\frac{1}{2}(\eta_u+\eta_b)
-\end{equation}
-经过坐标变换后， 上下边界在新坐标下依然位于$\xi_2=0,1$处。
-物理空间与计算空间之间的微分关系：
-\begin{equation}
-\begin{split}
-\Partial{}{t}&=\Partial{}{\tau}\Partial{\tau}{t}+\Partial{}{\xi_2}\Partial{\xi_2}{t}=\Partial{}{\tau}+\phi_t\Partial{}{\xi_2}\\
-\Partial{}{x_1}&=\Partial{}{\xi_1}\Partial{\xi_1}{x_1}+\Partial{}{\xi_2}\Partial{\xi_2}{x_1}=\Partial{}{\xi_1}+\phi_1\Partial{}{\xi_2}\\
-\Partial{}{x_2}&=\Partial{}{\xi_2}\Partial{\xi_2}{x_2}=\Partial{}{\xi_2}+\phi_2\Partial{}{\xi_2}\\
-\Partial{}{x_3}&=\Partial{}{\xi_3}\Partial{\xi_3}{x_3}+\Partial{}{\xi_2}\Partial{\xi_2}{x_3}=\Partial{}{\xi_3}+\phi_3\Partial{}{\xi_2}\\
-\end{split}
-\end{equation}
-其中
-\begin{equation}\label{eq:phi_i}
-\begin{split}
-\phi_t&=\Partial{\xi_2}{t}=-\frac{1}{\eta_-+1}[(\xi_2-1)\Partial{\eta_-}{t}+\Partial{\eta_+}{t}]\\
-\phi_1&=\Partial{\xi_2}{x_1}=-\frac{1}{\eta_-+1}[(\xi_2-1) \Partial{\eta_-}{x_1}+\Partial{\eta_+}{x_1}]\\
-\phi_2&=\Partial{\xi_2}{x_2}=\frac{1}{\eta_-+1}-1\\
-\phi_3&=\Partial{\xi_2}{x_3}=-\frac{1}{\eta_-+1}[(\xi_2-1) \Partial{\eta_-}{x_3}+\Partial{\eta_+}{x_3}]\\
-\end{split}
-\end{equation}
-\iffalse
-Laplace 算子为：
-\begin{equation}
-\begin{split}
-\nabla^2 =\frac{\partial ^2}{\partial x_j \partial x_j}=&\frac{\partial ^2}{\partial \xi_1^2}+\frac{\partial ^2}{\partial \xi_3^2}\\
-&+(\Partial{\phi_1}{\xi_1}+\Partial{\phi_3}{\xi_3})\Partial{}{\xi_2}\\
-&+2(\phi_1\Partial{}{\xi_1}+\phi_3\Partial{}{\xi_3})\Partial{}{\xi_2}\\
-&+\frac{1}{2}\Partial{\Phi}{\xi_2}\Partial{}{\xi_2}+\Phi\frac{\partial ^2}{\partial \xi_2^2}\\
-\end{split}
-\end{equation}
-其中 $\Phi=\phi_1^2+\phi_2^2+\phi_3^2$
-
-非线性项的处理，在计算空间进行
-\fi
-具体的原理详见《运动边界槽道湍流数值模拟方法》\footnote{原说明文档中$\eta_+, \eta_-$ 分别用$\eta_0, \eta$表示，公式(\ref{eq:phi_i})中的$\phi_2$在原说明文档中有笔误。}
+%\begin{equation}
+%\eta_-=\frac{1}{2}(\eta_u-\eta_b), \eta_+ =\frac{1}{2}(\eta_u+\eta_b)
+%\end{equation}
+%经过坐标变换后， 上下边界在新坐标下依然位于$\xi_2=0,1$处。
+%物理空间与计算空间之间的微分关系：
+%\begin{equation}
+%\begin{split}
+%\Partial{}{t}&=\Partial{}{\tau}\Partial{\tau}{t}+\Partial{}{\xi_2}\Partial{\xi_2}{t}=\Partial{}{\tau}+\phi_t\Partial{}{\xi_2}\\
+%\Partial{}{x_1}&=\Partial{}{\xi_1}\Partial{\xi_1}{x_1}+\Partial{}{\xi_2}\Partial{\xi_2}{x_1}=\Partial{}{\xi_1}+\phi_1\Partial{}{\xi_2}\\
+%\Partial{}{x_2}&=\Partial{}{\xi_2}\Partial{\xi_2}{x_2}=\Partial{}{\xi_2}+\phi_2\Partial{}{\xi_2}\\
+%\Partial{}{x_3}&=\Partial{}{\xi_3}\Partial{\xi_3}{x_3}+\Partial{}{\xi_2}\Partial{\xi_2}{x_3}=\Partial{}{\xi_3}+\phi_3\Partial{}{\xi_2}\\
+%\end{split}
+%\end{equation}
+%其中
+%\begin{equation}\label{eq:phi_i}
+%\begin{split}
+%\phi_t&=\Partial{\xi_2}{t}=-\frac{1}{\eta_-+1}[(\xi_2-1)\Partial{\eta_-}{t}+\Partial{\eta_+}{t}]\\
+%\phi_1&=\Partial{\xi_2}{x_1}=-\frac{1}{\eta_-+1}[(\xi_2-1) \Partial{\eta_-}{x_1}+\Partial{\eta_+}{x_1}]\\
+%\phi_2&=\Partial{\xi_2}{x_2}=\frac{1}{\eta_-+1}-1\\
+%\phi_3&=\Partial{\xi_2}{x_3}=-\frac{1}{\eta_-+1}[(\xi_2-1) \Partial{\eta_-}{x_3}+\Partial{\eta_+}{x_3}]\\
+%\end{split}
+%\end{equation}
+%\iffalse
+%Laplace 算子为：
+%\begin{equation}
+%\begin{split}
+%\nabla^2 =\frac{\partial ^2}{\partial x_j \partial x_j}=&\frac{\partial ^2}{\partial \xi_1^2}+\frac{\partial ^2}{\partial \xi_3^2}\\
+%&+(\Partial{\phi_1}{\xi_1}+\Partial{\phi_3}{\xi_3})\Partial{}{\xi_2}\\
+%&+2(\phi_1\Partial{}{\xi_1}+\phi_3\Partial{}{\xi_3})\Partial{}{\xi_2}\\
+%&+\frac{1}{2}\Partial{\Phi}{\xi_2}\Partial{}{\xi_2}+\Phi\frac{\partial ^2}{\partial \xi_2^2}\\
+%\end{split}
+%\end{equation}
+%其中 $\Phi=\phi_1^2+\phi_2^2+\phi_3^2$
+%
+%非线性项的处理，在计算空间进行
+%\fi
+%具体的原理详见《运动边界槽道湍流数值模拟方法》\footnote{原说明文档中$\eta_+, \eta_-$ 分别用$\eta_0, \eta$表示，公式(\ref{eq:phi_i})中的$\phi_2$在原说明文档中有笔误。}
 
 
 
