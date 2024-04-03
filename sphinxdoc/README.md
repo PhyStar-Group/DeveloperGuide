@@ -1,3 +1,5 @@
+# 如果只是查看文档，clone当前repo后，直接在本地用浏览器打开build/html/index.html
+
 # Sphinx 启用流程
 
 1. 如果有需要建立新的doc可以参考官网流程[https://www.sphinx-doc.org/zh_CN/master/tutorial/getting-started.html#setting-up-your-project-and-development-environment](https://www.sphinx-doc.org/zh_CN/master/tutorial/getting-started.html#setting-up-your-project-and-development-environment)
@@ -42,4 +44,3 @@
     - 以上启用操作需要在sphinxdoc目录中进行
     - 
 
-3. 如果只是查看文档，可直接打开build/html/index.html
