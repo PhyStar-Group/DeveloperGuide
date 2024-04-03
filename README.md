@@ -1,6 +1,7 @@
 # 开发者中文手册
 开发者手册（中文）
 ## 注意！！！后续将使用[Sphinx 文档](sphinxdoc/README.md)，其余内容将会被弃用
+## 如果只是查看手册内容，clone当前repo到本地后，直接用浏览器访问sphinxdoc/build/html/index.html
 
 ## [理论手册](0-Theory/README.md)
 各个部分的理论
