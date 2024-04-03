@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="颗粒受力模型列表工作原理" href="model_list.html" /><link rel="prev" title="PhyStar构建思路" href="frame.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="颗粒场的存储接口" href="particleio.html" /><link rel="prev" title="FileIO的基础接口" href="ioutils.html" />
 
     <!-- Generated with Sphinx 7.1.2 and Furo 2023.08.19 -->
-        <title>如何利用GitHub进行协作开发 - PhyStar-Dev 0.0.1 documentation</title>
+        <title>流场存储接口 - PhyStar-Dev 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
@@ -166,11 +166,11 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index_dev.html">设计与使用</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 设计与使用</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../index_program.html">程序整体设计</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 程序整体设计</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../index_program.html">程序整体设计</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 程序整体设计</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../program.html">架构设计思路</a></li>
-<li class="toctree-l3"><a class="reference internal" href="frame.html">PhyStar构建思路</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">如何利用GitHub进行协作开发</a></li>
-<li class="toctree-l3"><a class="reference internal" href="model_list.html">颗粒受力模型列表工作原理</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../program/frame.html">PhyStar构建思路</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../program/use_github.html">如何利用GitHub进行协作开发</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../program/model_list.html">颗粒受力模型列表工作原理</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../index_dmdyn.html">颗粒动力学模块 – DMDyn</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 颗粒动力学模块 – DMDyn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -183,10 +183,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../mod_tfft3d.html#pencil">pencil数据交互</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../index_fileio.html">基于HDF5的文件格式 – FileIO</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 基于HDF5的文件格式 – FileIO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../fileio/ioutils.html">FileIO的基础接口</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../fileio/fluidio.html">流场存储接口</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../fileio/particleio.html">颗粒场的存储接口</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index_fileio.html">基于HDF5的文件格式 – FileIO</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 基于HDF5的文件格式 – FileIO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ioutils.html">FileIO的基础接口</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">流场存储接口</a></li>
+<li class="toctree-l3"><a class="reference internal" href="particleio.html">颗粒场的存储接口</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../index_toml.html">toml格式的字典文件 – DictIO</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of toml格式的字典文件 – DictIO</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="simple">
@@ -272,37 +272,111 @@
           </label>
         </div>
         <article role="main">
-          <section class="tex2jax_ignore mathjax_ignore" id="github">
-<h1>如何利用GitHub进行协作开发<a class="headerlink" href="#github" title="Permalink to this heading">#</a></h1>
-<section id="id1">
-<h2>开发模式<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h2>
-<section id="pr">
-<h3>PR开发流程<a class="headerlink" href="#pr" title="Permalink to this heading">#</a></h3>
-<p><img alt="PR开发流程示意图" src="../../_images/pr-flow.png" /></p>
-<ol class="arabic simple">
-<li><p>上游仓库通常保留Release,  main,  pre 和 dev 三个分支：</p>
+          <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>流场存储接口<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<p>目前仅支持笛卡尔网格下的MPI并行/串行的读写，可切换核数</p>
+<section id="fluidcartregulard-n-dim-filetag">
+<h2>FluidCartRegularD&lt;N_dim, FileTag&gt;<a class="headerlink" href="#fluidcartregulard-n-dim-filetag" title="Permalink to this heading">#</a></h2>
+<p>笛卡尔网格下的双精度流体场读写接口类</p>
 <ul class="simple">
-<li><p>main分支一般为活跃的开发主版本，受到保护，<strong>不接收下游分支的直接合并</strong>，只可以从dev分支合并, 需管理员在github上手动完成合并</p></li>
-<li><p>pre分支为预发布版本，用于测试与文档维护，不进行任何代码维护（包括注释），只可以从main分支合并而来。</p></li>
-<li><p>dev分支为开发分支，通常不接收直接修改，只允许从dev热分支或下游分支合并</p></li>
-<li><p>dev热分支，也为开发分支，主要针对特定功能或issue的开发或解决</p></li>
-<li><p>Release分支为稳定发布版本，由pre分支对应的测试稳定版本签出合并得到</p></li>
+<li><p>N_dim 为维度，</p></li>
+<li><p>FileTag 为标签，默认为不存虚拟网格，大部分情况下不用管</p></li>
+<li><p>推荐的API（具体参考源代码，或doxygen函数索引）</p></li>
 </ul>
-</li>
-<li><p>如果作为开发者，准备对代码进行贡献，可以直接从上游仓库fork到个人仓库；</p>
-<ul class="simple">
-<li><p>github默认只fork main分支，无特殊需求，可以直接从main主分支添加新功能。下游对应的main分支可以随时同步上游的变化。</p></li>
-<li><p>如果有其它需求，只能选择fork 所有分支，并选择特定分支进行修改。</p></li>
-</ul>
-</li>
-<li><p>如果只是想要使用代码，clone相关分支到本地即可，在需要贡献代码时，再进行fork与pull request 操作</p></li>
-<li><p>下游开发者，每次代码贡献，<strong>务必从上游fork最新的代码</strong>，再进行修改与合并。main分支时刻保持与上游同步。建议在下游操作时，就解决分支的相关冲突。此外，下游开发者尽可能不要修改下游的main或对应的fork分支，一般通过新建分支，在新分支上进行修改，然后再合并到上游dev或相应的热分支。</p></li>
-<li><p>在pull request中务必选择dev 开头的分支，或有需要，请联系管理员，新建dev 热分支</p></li>
-<li><p>dev热分支与dev分支的合并均在github或codespace中进行，完成合并后的main分支，务必需要在本地进行初步测试，再合并到pre分支进行预发布版本的测试。</p></li>
-<li><p>为了让不同开发者的代码尽可能差异最小化，建议开发者尽可能在完成较小功能时，就实现PR，合并到dev分支以及main分支</p></li>
-<li><p>以上流程为试行，在后期开发过程中再根据实际情况进行调整</p></li>
-</ol>
-</section>
+<table border="1" class="docutils">
+<thead>
+<tr>
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SetMPI</td>
+<td>并行设置</td>
+</tr>
+<tr>
+<td>SetMeshc<br>SetMeshf</td>
+<td>设置不同方向的网格，因为是笛卡尔，每个方向是一个一维数组，c代表网格中心位置，f代表网格面位置</td>
+</tr>
+<tr>
+<td>SetGhostMesh</td>
+<td>设置虚拟网格数</td>
+</tr>
+<tr>
+<td>SetDomain</td>
+<td>设置数据的流体域</td>
+</tr>
+<tr>
+<td>SetFileAttr</td>
+<td>设置文件的属性</td>
+</tr>
+<tr>
+<td>AllocateBuffer</td>
+<td>申请缓存，共用的缓存区</td>
+</tr>
+<tr>
+<td>DeallocateBuffer</td>
+<td>释放缓存，共用的缓存区</td>
+</tr>
+<tr>
+<td>Print</td>
+<td>打印存储信息摘要</td>
+</tr>
+<tr>
+<td>CreateFile</td>
+<td>创建文件</td>
+</tr>
+<tr>
+<td>OpenFile</td>
+<td>打开存在的文件</td>
+</tr>
+<tr>
+<td>CloseFile</td>
+<td>关闭文件</td>
+</tr>
+<tr>
+<td>AddAttributeTo</td>
+<td>添加属性到不同的FluidGroup</td>
+</tr>
+<tr>
+<td>AddDataSetTo</td>
+<td>添加数据集到不同的FluidGroup</td>
+</tr>
+<tr>
+<td>AddDataSetCplxTo</td>
+<td>添加复数数据集到不同的FluidGroup</td>
+</tr>
+<tr>
+<td>AddField</td>
+<td>添加场到Fields Group下</td>
+</tr>
+<tr>
+<td>AddCplxField</td>
+<td>添加复数场到Fields Group下</td>
+</tr>
+<tr>
+<td>ReadAttributeFrom</td>
+<td>从不同的FluidGroup读取属性</td>
+</tr>
+<tr>
+<td>ReadDataSetFrom</td>
+<td>从不同的FluidGroup读取数据</td>
+</tr>
+<tr>
+<td>ReadDataSetCplxFrom</td>
+<td>从不同的FluidGroup读取复数数据集</td>
+</tr>
+<tr>
+<td>ReadField</td>
+<td>从Fields Group读取场</td>
+</tr>
+<tr>
+<td>ReadCplxField</td>
+<td>从Fields Group读取复数场</td>
+</tr>
+</tbody>
+</table>
 </section>
 </section>
 
@@ -311,23 +385,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="model_list.html">
+          <a class="next-page" href="particleio.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">颗粒受力模型列表工作原理</div>
+                <div class="title">颗粒场的存储接口</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="frame.html">
+          <a class="prev-page" href="ioutils.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">PhyStar构建思路</div>
+                <div class="title">FileIO的基础接口</div>
                 
               </div>
             </a>
@@ -361,11 +435,8 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">如何利用GitHub进行协作开发</a><ul>
-<li><a class="reference internal" href="#id1">开发模式</a><ul>
-<li><a class="reference internal" href="#pr">PR开发流程</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">流场存储接口</a><ul>
+<li><a class="reference internal" href="#fluidcartregulard-n-dim-filetag">FluidCartRegularD&lt;N_dim, FileTag&gt;</a></li>
 </ul>
 </li>
 </ul>
