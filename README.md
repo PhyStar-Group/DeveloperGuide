@@ -1,5 +1,9 @@
 # 开发者中文手册
 开发者手册（中文）
+## 注意
+**为了方便大家在线查看手册，开发手册将移至[语雀平台](https://www.yuque.com/) (edu.cn 邮箱可免费升级专业版)， 该repo将不再更新。 由于本项目暂不开源，有需求的同学请联系@Cui-ZW 或 czw17 at tsinghua dot org dot cn 申请加入**
+
+
 ## 注意！！！后续将使用[Sphinx 文档](sphinxdoc/README.md)，其余内容将会被弃用
 ## 如果只是查看手册内容，clone当前repo到本地后，直接用浏览器访问sphinxdoc/build/html/index.html
 
