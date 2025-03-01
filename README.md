@@ -3,7 +3,7 @@
 ## 注意
 **为了方便大家在线查看手册，开发手册将移至[语雀平台](https://www.yuque.com/) (edu.cn 邮箱可免费升级专业版)， 该repo将不再更新**
 - 目前在线版本的：[https://www.yuque.com/cuizw/phystar](https://www.yuque.com/cuizw/phystar)
-- 访问密码：ffsg (均是小写字母，如果发生更改，随时同步更新)
+- 访问密码：[syhr] (均是小写字母，如果发生更改，随时同步更新)
 - **由于本项目暂不开源，请不要随意分享手册链接和密码**
 - 有需要完善文档的同学请联系@Cui-ZW 或 czw17 at tsinghua dot org dot cn 申请加入
   
