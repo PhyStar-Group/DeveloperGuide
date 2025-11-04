@@ -11,6 +11,18 @@
         python -m venv .venv
         python3 -m venv .venv // only if python is unavailable
         ```
+        -  如果报如下错误，安装提示安装虚拟环境即可，sudo apt install python3.10-venv
+            ```
+            The virtual environment was not created successfully because ensurepip is not
+            available.  On Debian/Ubuntu systems, you need to install the python3-venv
+            package using the following command.
+
+                apt install python3.10-venv
+
+            You may need to use sudo with that command.  After installing the python3-venv
+            package, recreate your virtual environment.
+        ```
+ 
     - 加载虚拟环境
         ```
         source .venv/bin/activate
@@ -18,6 +30,19 @@
         如果后面想要卸载该虚拟环境，可以使用
         ```
         deactivate
+        ```
+        ```
+        python -m pip install sphinx
+        ```
+        
+        ```
+        mkdir -p ~/.pip
+        cat > ~/.pip/pip.conf << 'EOF'
+        [global]
+        index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+        timeout = 6000
+        trusted-host = pypi.tuna.tsinghua.edu.cn
+        EOF
         ```
     - 同时，本文档采用furo主题
         ```
