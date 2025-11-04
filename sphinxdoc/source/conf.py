@@ -37,4 +37,5 @@ myst_enable_extensions = [
 html_theme = 'furo'
 html_static_path = ['_static']
 
-
+# --- Add these ---
+html_baseurl = "https://phystar-group.github.io/DeveloperGuide/"
