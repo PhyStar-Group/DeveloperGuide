@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'PhyStar-Dev'
+project = 'PhyStar'
 copyright = '2023, Zhiwen Cui'
 author = 'Zhiwen Cui'
-release = '0.0.1'
+release = 'Tsai 0.1.x'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -37,5 +37,5 @@ myst_enable_extensions = [
 html_theme = 'furo'
 html_static_path = ['_static']
 
-# --- Add these ---
-html_baseurl = "https://phystar-group.github.io/DeveloperGuide/"
+# # --- Add these ---
+# html_baseurl = "https://phystar-group.github.io/DeveloperGuide/"

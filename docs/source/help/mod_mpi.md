@@ -4,7 +4,7 @@
 
 从组的所有成员收集数据，并将数据发送到组的所有成员。原理查看下图，详细说明查看[MPI Scatter, Gather, and Allgather](https://mpitutorial.com/tutorials/mpi-scatter-gather-and-allgather/zh_cn/)：
 
-![MPI_Allgather](figure_MPI/MPI_Allgather.jpg)
+![MPI_Allgather](figure/MPI/MPI_Allgather.jpg)
 
 ```c++
 int MPIAPI MPI_Allgather(
@@ -44,7 +44,7 @@ MPI_Comm通信器句柄。
 
 将组的所有成员的变量数据收集到一个成员。 MPI_Gatherv函数通过允许每个进程的不同数据计数，为MPI_Gather函数增添灵活性。原理查看下图，详细说明查看[Examples using MPI_GATHER, MPI_GATHERV](https://www.mpi-forum.org/docs/mpi-1.1/mpi-11-html/node70.html)：
 
-![MPI_gatherv](figure_MPI/MPI_gatherv.jpg)
+![MPI_gatherv](figure/MPI/MPI_gatherv.jpg)
 
 
 ```c++
