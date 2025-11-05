@@ -1,2 +1,4 @@
 sphinx
 furo
+myst_parser
+sphinx_markdown_tables
